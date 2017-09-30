@@ -15,12 +15,13 @@ public final class PriviesPersistenceContract {
     private PriviesPersistenceContract() {}
 
     /* Inner class that defines the table contents */
-    public static abstract class TaskEntry implements BaseColumns {
+    public static abstract class PrivyEntry implements BaseColumns {
         public static final String TABLE_NAME = "privies";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
         public static final String COLUMN_NAME_ID = "privyId";
         public static final String COLUMN_NAME_LOCATION_NAME = "address";
         public static final String COLUMN_NAME_LOCATION_LAT = "latitude";
         public static final String COLUMN_NAME_LOCATION_LON = "longitude";
+        public static final String COLUMN_NAME_OPENING_HOURS = "openingHours";
     }
 }
