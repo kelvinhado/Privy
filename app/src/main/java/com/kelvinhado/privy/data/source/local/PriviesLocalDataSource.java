@@ -43,7 +43,7 @@ public class PriviesLocalDataSource implements PriviesDataSource {
      */
     @Override
     public void getPrivies(@NonNull LoadPriviesCallback callback) {
-        List<Privy> privies = new ArrayList<Privy>();
+        List<Privy> privies = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
