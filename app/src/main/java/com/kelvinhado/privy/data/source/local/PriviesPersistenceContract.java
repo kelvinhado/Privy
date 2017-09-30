@@ -15,7 +15,7 @@ public final class PriviesPersistenceContract {
     private PriviesPersistenceContract() {}
 
     /* Inner class that defines the table contents */
-    public static abstract class PrivyEntry implements BaseColumns {
+    public static final class PrivyEntry implements BaseColumns {
         public static final String TABLE_NAME = "privies";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
         public static final String COLUMN_NAME_ID = "privyId";

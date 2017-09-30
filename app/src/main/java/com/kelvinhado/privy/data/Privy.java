@@ -77,7 +77,7 @@ public class Privy {
                 '}';
     }
 
-    static List<Privy> getFakePriviesList() {
+    public static List<Privy> getFakePriviesList() {
         final Privy privy = new Privy("aaa", "109 BOULEVARD DE SEBASTOPOL", "6 h - 22 h", 48.8668198774, 2.35272664515);
         final Privy privy2 = new Privy("bbb", "123 RUE SAINT MARTIN", "24 h / 24", 48.8607904234, 2.35131574473);
         return new ArrayList<Privy>() {{ add(privy); add(privy2); }};
