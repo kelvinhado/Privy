@@ -114,7 +114,7 @@ public class PriviesDbTest {
                 null);
 
         // TEST RECORDED
-        String emptyQueryError = "Error: No Records returned from waitlist query";
+        String emptyQueryError = "Error: No Record returned from waitlist query";
         assertTrue(emptyQueryError, wCursor.moveToFirst());
 
         /* Close cursor and database */
