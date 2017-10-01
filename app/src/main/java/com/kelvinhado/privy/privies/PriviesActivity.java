@@ -12,31 +12,43 @@ import butterknife.OnClick;
 
 public class PriviesActivity extends AppCompatActivity {
 
-    private PriviesPresenter mPriviesPresenter;
+    private PriviesPresenter mPriviesMapPresenter;
+    private PriviesPresenter mPriviesListPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privies);
         ButterKnife.bind(this);
-        PriviesMapFragment priviesMapFragment =
-                (PriviesMapFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (priviesMapFragment == null) {
+//        PriviesMapFragment priviesMapFragment =
+//                (PriviesMapFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+//        if (priviesMapFragment == null) {
+//            // Create the fragment
+//            priviesMapFragment = PriviesMapFragment.newInstance();
+//            ActivityUtils.addFragmentToActivity(
+//                    getSupportFragmentManager(), priviesMapFragment, R.id.content_frame);
+//        }
+        PriviesListFragment priviesListFragment =
+                (PriviesListFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (priviesListFragment == null) {
             // Create the fragment
-            priviesMapFragment = PriviesMapFragment.newInstance();
+            priviesListFragment = PriviesListFragment.newInstance();
             ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), priviesMapFragment, R.id.content_frame);
+                    getSupportFragmentManager(), priviesListFragment, R.id.content_frame);
         }
 
+
+
         // add presenter
-        mPriviesPresenter = new PriviesPresenter(
-                Injection.providePriviesRepository(this),
-                priviesMapFragment);
+//        mPriviesMapPresenter = new PriviesPresenter(Injection.providePriviesRepository(this),
+//                priviesMapFragment);
+        mPriviesListPresenter = new PriviesPresenter(Injection.providePriviesRepository(this),
+                priviesListFragment);
 
     }
 
     @OnClick(R.id.fab)
     public void navigateToList() {
-        mPriviesPresenter.loadPrivies(true);
+        mPriviesMapPresenter.loadPrivies(true);
     }
 }
