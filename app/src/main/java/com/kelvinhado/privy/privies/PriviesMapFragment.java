@@ -81,7 +81,6 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     public void onResume() {
         mMapView.onResume();
         super.onResume();
-        mPresenter.start();
     }
 
     @Override
@@ -146,6 +145,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     public void onMapReady(GoogleMap googleMap) {
         isMapReady = true;
         mGoogleMap = googleMap;
+        mPresenter.start();
         //custom settings
         enableMyLocation();
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);

@@ -10,6 +10,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface RatpPriviesService {
-    @GET("api/records/1.0/search/?dataset=sanisettesparis2011&rows=500")
+    @GET("api/records/1.0/search/?dataset=sanisettesparis2011&rows=1000")
     Call<RatpPrivyPojo> listPrivies();
 }

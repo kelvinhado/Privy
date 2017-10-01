@@ -72,10 +72,14 @@ public class PriviesActivity extends AppCompatActivity implements TabLayout.OnTa
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         mViewPager.setCurrentItem(tab.getPosition());
+
         if(tab.getPosition() == 0) {
             fab.show();
         } else {
             fab.hide();
+        }
+        if(tab.getPosition() == 1) {
+            mPriviesListPresenter.loadPrivies(false);
         }
     }
 

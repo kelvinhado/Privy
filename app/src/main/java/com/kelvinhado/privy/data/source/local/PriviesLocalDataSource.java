@@ -78,8 +78,6 @@ public class PriviesLocalDataSource implements PriviesDataSource {
             c.close();
         }
 
-        db.close();
-
         if (privies.isEmpty()) {
             // This will be called if the table is new or just empty.
             Log.d(TAG, "no data found");
