@@ -52,8 +52,8 @@ public class PriviesActivity extends AppCompatActivity implements TabLayout.OnTa
         fragments.add(listFragment);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("List"));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.navigation_fragment_title_map)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.navigation_fragment_title_list)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mViewPager.setAdapter(new PriviesViewPagerAdapter(getSupportFragmentManager(), fragments));
