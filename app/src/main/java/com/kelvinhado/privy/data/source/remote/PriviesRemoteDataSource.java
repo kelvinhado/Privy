@@ -6,6 +6,7 @@ import android.util.Log;
 import com.kelvinhado.privy.data.Privy;
 import com.kelvinhado.privy.data.source.PriviesDataSource;
 import com.kelvinhado.privy.data.source.remote.pojo.RatpPrivyPojo;
+import com.kelvinhado.privy.data.source.remote.pojo.Record;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,15 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
 
     private LoadPriviesCallback mCallback;
 
+    // Prevent direct instantiation.
+    private PriviesRemoteDataSource() {}
+
     public static PriviesRemoteDataSource getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PriviesRemoteDataSource();
         }
         return INSTANCE;
     }
-
-    // Prevent direct instantiation.
-    private PriviesRemoteDataSource() {}
 
     @Override
     public void getPrivies(@NonNull LoadPriviesCallback callback) {
@@ -52,13 +53,13 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
         pojo.enqueue(this);
     }
 
-    private Privy convertToPrivy(RatpPrivyPojo.Record pojo) {
+    private Privy convertToPrivy(Record pojo) {
         return new Privy(
                 pojo.getRecordid(),
-                pojo.getNumero_voie() + pojo.getNom_voie(),
-                pojo.getHoraires_ouverture(),
-                pojo.getGeom_x_y()[0],
-                pojo.getGeom_x_y()[1]
+                pojo.getFields().getNumero_voie() + " " + pojo.getFields().getNom_voie(),
+                pojo.getFields().getHoraires_ouverture(),
+                pojo.getFields().getGeom_x_y()[0],
+                pojo.getFields().getGeom_x_y()[1]
         );
     }
 
@@ -67,7 +68,7 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
         if(response.isSuccessful()) {
             RatpPrivyPojo pojo = response.body();
             List<Privy> privies = new ArrayList<>();
-            for (RatpPrivyPojo.Record record : pojo.getRecords()) {
+            for (Record record : pojo.getRecords()) {
                 privies.add(convertToPrivy(record));
             }
             mCallback.onPriviesLoaded(privies);
@@ -79,7 +80,7 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
 
     @Override
     public void onFailure(Call<RatpPrivyPojo> call, Throwable t) {
-        Log.e(TAG, "connexion error");
+        Log.e(TAG, "connexion error" + t.getLocalizedMessage());
         mCallback.onDataNotAvailable();
     }
 }
