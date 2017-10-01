@@ -1,6 +1,8 @@
 package com.kelvinhado.privy.privies;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -11,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Privy;
@@ -124,7 +125,16 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
 
     @Override
     public void onListItemClicked(int itemPosition) {
-        Toast.makeText(getContext(), "item selected "  + itemPosition, Toast.LENGTH_SHORT).show();
+        Privy privy = mPriviesList.get(itemPosition);
+        String str = "geo:" + privy.getLatitude() + "," + privy.getLongitude()
+                + "?q=" + privy.getLatitude() + "," + privy.getLongitude()
+                + "(" + Uri.encode(privy.getAddressName()) + ")";
+        Uri gmmIntentUri = Uri.parse(str);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.kelvinhado.privy.R;
@@ -34,8 +35,10 @@ public class PriviesActivity extends AppCompatActivity implements TabLayout.OnTa
         setContentView(R.layout.activity_privies);
         ButterKnife.bind(this);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setElevation(0L);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setElevation(0L);
+            actionBar.setTitle(R.string.actionbar_main_title);
         }
 
         PriviesListFragment listFragment = PriviesListFragment.newInstance();
