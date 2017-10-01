@@ -62,12 +62,16 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_privies_map, container, false);
+        initializeLoader();
+        initializeMap(savedInstanceState);
+        return mRootView;
+    }
+
+    private void initializeLoader() {
         mProgress = new ProgressDialog(getContext());
         mProgress.setTitle(getString(R.string.progress_loading_title));
         mProgress.setMessage(getString(R.string.progress_loading_message));
         mProgress.setIndeterminate(true);
-        initializeMap(savedInstanceState);
-        return mRootView;
     }
 
     @Override

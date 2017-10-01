@@ -5,4 +5,6 @@
     <string name="progress_loading_title">Chargement</string>
     <string name="progress_loading_message">Nous recherchons les petits coins</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="list_item_btn_navigate">Naviguer</string>
+    <string name="snackbar_error_message">Une erreur est survenue, vérifiez votre réseau.</string>
 </resources>
