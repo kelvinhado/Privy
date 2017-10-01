@@ -114,10 +114,6 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         Toast.makeText(getContext(), "error loading data..", Toast.LENGTH_SHORT).show();
     }
 
-    private void refreshData() {
-        mPresenter.loadPrivies(true);
-    }
-
     // Map Management_______________________________________________________________________________
     public void initializeMap(Bundle savedInstanceState) {
         mMapView = (MapView) mRootView.findViewById(R.id.mv_google_mapview);

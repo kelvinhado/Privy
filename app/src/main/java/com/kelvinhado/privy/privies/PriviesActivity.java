@@ -2,7 +2,6 @@ package com.kelvinhado.privy.privies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Injection;
@@ -12,6 +11,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PriviesActivity extends AppCompatActivity {
+
+    private PriviesPresenter mPriviesPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class PriviesActivity extends AppCompatActivity {
         }
 
         // add presenter
-        new PriviesPresenter(
+        mPriviesPresenter = new PriviesPresenter(
                 Injection.providePriviesRepository(this),
                 priviesMapFragment);
 
@@ -36,6 +37,6 @@ public class PriviesActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void navigateToList() {
-        Toast.makeText(this, "go to list", Toast.LENGTH_SHORT).show();
+        mPriviesPresenter.loadPrivies(true);
     }
 }

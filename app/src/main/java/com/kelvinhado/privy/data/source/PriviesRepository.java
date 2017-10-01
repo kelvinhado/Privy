@@ -105,6 +105,7 @@ public class PriviesRepository implements PriviesDataSource {
             @Override
             public void onPriviesLoaded(List<Privy> privies) {
                 refreshLocalDataSource(privies);
+                mCacheIsDirty = false;
                 callback.onPriviesLoaded(privies);
             }
 
