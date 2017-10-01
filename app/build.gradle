@@ -13,6 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "gmaps_api_key", GMAPS_API_KEY
+        multiDexEnabled true
     }
     buildTypes {
         release {
