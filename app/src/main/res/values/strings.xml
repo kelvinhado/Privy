@@ -4,4 +4,5 @@
     <string name="map_marker_title">Position</string>
     <string name="progress_loading_title">Chargement</string>
     <string name="progress_loading_message">Nous recherchons les petits coins</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
