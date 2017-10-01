@@ -137,6 +137,8 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         enableMyLocation();
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
+        mGoogleMap.getUiSettings().setTiltGesturesEnabled(false);
+        mGoogleMap.getUiSettings().setRotateGesturesEnabled(false);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mGoogleMap.setMaxZoomPreference(18);
         LatLng position = new LatLng(48.866667, 2.333333);
