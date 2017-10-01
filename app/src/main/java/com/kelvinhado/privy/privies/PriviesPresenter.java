@@ -3,7 +3,11 @@ package com.kelvinhado.privy.privies;
 import android.support.annotation.NonNull;
 
 import com.kelvinhado.privy.BasePresenter;
+import com.kelvinhado.privy.data.Privy;
+import com.kelvinhado.privy.data.source.PriviesDataSource;
 import com.kelvinhado.privy.data.source.PriviesRepository;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -27,16 +31,31 @@ public class PriviesPresenter implements BasePresenter, PriviesContract.Presente
     
     @Override
     public void start() {
-        
+        loadPriviesFromDataSource();
     }
 
     @Override
     public void loadPrivies() {
-        
+        loadPriviesFromDataSource();
     }
 
     @Override
     public void queryShowFavorites() {
+
+    }
+
+    private void loadPriviesFromDataSource() {
+        mPriviesRepository.getPrivies(new PriviesDataSource.LoadPriviesCallback() {
+            @Override
+            public void onPriviesLoaded(List<Privy> privies) {
+                mPriviesView.showPrivies(privies);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mPriviesView.showLoadingPriviesError();
+            }
+        });
 
     }
 }
