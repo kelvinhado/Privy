@@ -56,7 +56,7 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
     private Privy convertToPrivy(Record pojo) {
         return new Privy(
                 pojo.getRecordid(),
-                pojo.getFields().getNumero_voie() + pojo.getFields().getNom_voie(),
+                pojo.getFields().getNumero_voie() + " " + pojo.getFields().getNom_voie(),
                 pojo.getFields().getHoraires_ouverture(),
                 pojo.getFields().getGeom_x_y()[0],
                 pojo.getFields().getGeom_x_y()[1]

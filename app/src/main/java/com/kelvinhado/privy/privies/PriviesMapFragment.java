@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Privy;
 
@@ -75,7 +76,8 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
 
     @Override
     public void showPrivies(List<Privy> privies) {
-        Toast.makeText(getContext(), privies.get(0).toString(), Toast.LENGTH_SHORT).show();
+        mPriviesList = privies;
+        updateMapMarkers();
     }
 
     @Override
@@ -90,7 +92,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
 
     @Override
     public void showLoadingPriviesError() {
-        Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "error loading data..", Toast.LENGTH_SHORT).show();
     }
 
     // Map Management_______________________________________________________________________________
@@ -99,6 +101,17 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         mMapView.getMapAsync(this);
+    }
+
+    public void updateMapMarkers() {
+        mGoogleMap.clear();
+        for(Privy privy : mPriviesList) {
+            mGoogleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(privy.getLatitude(), privy.getLongitude()))
+                    .title(getString(R.string.map_marker_title))
+                    .snippet(privy.getAddressName())
+            );
+        }
     }
 
     @Override
@@ -110,7 +123,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mGoogleMap.setMaxZoomPreference(18);
         LatLng position = new LatLng(48.866667, 2.333333);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 11));
     }
 
     @Override

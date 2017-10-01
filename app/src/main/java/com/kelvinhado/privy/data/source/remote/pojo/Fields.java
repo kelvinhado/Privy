@@ -1,6 +1,7 @@
 package com.kelvinhado.privy.data.source.remote.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Strings;
 
 /**
  * Created by kelvin on 01/10/2017.
@@ -17,7 +18,7 @@ public class Fields {
     }
 
     public String getNom_voie() {
-        return nom_voie;
+        return  Strings.nullToEmpty(nom_voie);
     }
 
     public void setNom_voie(String nom_voie) {
@@ -25,7 +26,7 @@ public class Fields {
     }
 
     public String getNumero_voie() {
-        return numero_voie;
+        return Strings.nullToEmpty(numero_voie);
     }
 
     public void setNumero_voie(String numero_voie) {
@@ -33,7 +34,7 @@ public class Fields {
     }
 
     public String getHoraires_ouverture() {
-        return horaires_ouverture;
+        return Strings.nullToEmpty(horaires_ouverture);
     }
 
     public void setHoraires_ouverture(String horaires_ouverture) {
