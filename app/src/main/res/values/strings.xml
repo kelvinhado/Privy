@@ -1,10 +1,15 @@
 <resources>
     <string name="app_name">Privy</string>
-    <string name="navigation_view_header_title">Privy</string>
+    <string name="navigation_header_title">Privy</string>
+    <string name="navigation_fragment_title_map">Carte</string>
+    <string name="navigation_fragment_title_list">Liste</string>
     <string name="map_marker_title">Position</string>
     <string name="progress_loading_title">Chargement</string>
     <string name="progress_loading_message">Nous recherchons les petits coins</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="list_item_btn_navigate">Naviguer</string>
     <string name="snackbar_error_message">Une erreur est survenue, vérifiez votre réseau.</string>
+    <string name="actionbar_main_title">Privy : Vos toilettes à Paris</string>
+    <string name="alert_dialog_launch_gps">Lancer le GPS</string>
+    <string name="alert_dialog_cancel">Annuler</string>
 </resources>
