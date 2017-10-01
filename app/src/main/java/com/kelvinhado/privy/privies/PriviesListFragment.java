@@ -3,7 +3,9 @@ package com.kelvinhado.privy.privies;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,16 +28,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by kelvin on 01/10/2017.
  */
 
-public class PriviesListFragment extends Fragment implements PriviesContract.View, PriviesListAdapter.ListItemClickListener {
+public class PriviesListFragment extends Fragment implements PriviesContract.View,
+        PriviesListAdapter.ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 101;
     @BindView(R.id.rv_privies)
     RecyclerView mRecyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     private PriviesContract.Presenter mPresenter;
     private List<Privy> mPriviesList;
     private View mRootView;
     private ProgressDialog mProgress;
+    private Snackbar mSnackBar;
     private PriviesListAdapter mAdapter;
+
 
     public PriviesListFragment() {
         // Requires empty public constructor
@@ -60,6 +68,9 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        initializeLoader();
+        mSnackBar = Snackbar.make(mRootView, R.string.snackbar_error_message, Snackbar.LENGTH_SHORT);
         mAdapter = new PriviesListAdapter(mPriviesList, this);
         mRecyclerView.setAdapter(mAdapter);
         mPresenter.loadPrivies(false);
@@ -73,31 +84,53 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
 
     @Override
     public void setLoadingIndicator(boolean active) {
+        if(active) {
+            mProgress.show();
+        } else {
+            mProgress.dismiss();
+        }
+    }
 
+    private void initializeLoader() {
+        mProgress = new ProgressDialog(getContext());
+        mProgress.setTitle(getString(R.string.progress_loading_title));
+        mProgress.setMessage(getString(R.string.progress_loading_message));
+        mProgress.setIndeterminate(true);
     }
 
     @Override
     public void showPrivies(List<Privy> privies) {
+        mSwipeRefreshLayout.setRefreshing(false);
         mAdapter.swap(privies);
     }
 
     @Override
     public void showFavoritePrivies(List<Privy> privies) {
-
+        // Not implemented yet
     }
 
     @Override
     public void showNoPrivies() {
-
+        showLoadingError();
     }
 
     @Override
     public void showLoadingPriviesError() {
+        showLoadingError();
+    }
 
+    private void showLoadingError() {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mSnackBar.show();
     }
 
     @Override
     public void onListItemClicked(int itemPosition) {
         Toast.makeText(getContext(), "item selected "  + itemPosition, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.loadPrivies(true);
     }
 }

@@ -60,27 +60,8 @@ class PriviesListAdapter extends RecyclerView.Adapter<PriviesListAdapter.PrivyVi
         notifyDataSetChanged();
     }
 
-    class PrivyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.item_tv_address)
-        TextView address;
-        @BindView(R.id.item_tv_opening_hour)
-        TextView openingHour;
-
-        public PrivyViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        void bind(Privy privy) {
-            address.setText(privy.getAddressName().toLowerCase());
-            openingHour.setText(privy.getOpeningHours().toLowerCase());
-        }
-
-        @Override
-        public void onClick(View view) {
-            mListener.onListItemClicked(getAdapterPosition());
-        }
+    public interface ListItemClickListener {
+        void onListItemClicked(int itemPosition);
     }
 
     class PrivyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -104,7 +85,5 @@ class PriviesListAdapter extends RecyclerView.Adapter<PriviesListAdapter.PrivyVi
         public void onClick(View view) {
             mListener.onListItemClicked(getAdapterPosition());
         }
-    }    public interface ListItemClickListener {
-        void onListItemClicked(int itemPosition);
     }
 }
