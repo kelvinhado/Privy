@@ -29,6 +29,6 @@ public interface PriviesContract {
 
         void loadPrivies();
 
-        void queryShowFavorites();
+        void queryFavoritesPrivies();
     }
 }

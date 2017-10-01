@@ -2,4 +2,6 @@
     <string name="app_name">Privy</string>
     <string name="navigation_view_header_title">Privy</string>
     <string name="map_marker_title">Position</string>
+    <string name="progress_loading_title">Chargement</string>
+    <string name="progress_loading_message">Nous recherchons les petits coins</string>
 </resources>

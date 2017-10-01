@@ -40,19 +40,22 @@ public class PriviesPresenter implements BasePresenter, PriviesContract.Presente
     }
 
     @Override
-    public void queryShowFavorites() {
+    public void queryFavoritesPrivies() {
 
     }
 
     private void loadPriviesFromDataSource() {
+        mPriviesView.setLoadingIndicator(true);
         mPriviesRepository.getPrivies(new PriviesDataSource.LoadPriviesCallback() {
             @Override
             public void onPriviesLoaded(List<Privy> privies) {
+                mPriviesView.setLoadingIndicator(false);
                 mPriviesView.showPrivies(privies);
             }
 
             @Override
             public void onDataNotAvailable() {
+                mPriviesView.setLoadingIndicator(false);
                 mPriviesView.showLoadingPriviesError();
             }
         });

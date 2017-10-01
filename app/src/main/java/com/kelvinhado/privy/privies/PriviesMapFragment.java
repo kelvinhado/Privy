@@ -1,6 +1,7 @@
 package com.kelvinhado.privy.privies;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,6 +40,8 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
 
     private View mRootView;
 
+    private ProgressDialog mProgress;
+
     public PriviesMapFragment() {
         // Requires empty public constructor
     }
@@ -58,6 +61,10 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_privies_map, container, false);
+        mProgress = new ProgressDialog(getContext());
+        mProgress.setTitle(getString(R.string.progress_loading_title));
+        mProgress.setMessage(getString(R.string.progress_loading_message));
+        mProgress.setIndeterminate(true);
         initializeMap(savedInstanceState);
         return mRootView;
     }
@@ -76,7 +83,11 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
 
     @Override
     public void setLoadingIndicator(boolean active) {
-
+        if(active) {
+            mProgress.show();
+        } else {
+            mProgress.dismiss();
+        }
     }
 
     @Override
