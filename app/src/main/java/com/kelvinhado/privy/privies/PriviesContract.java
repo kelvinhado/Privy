@@ -10,7 +10,7 @@ import java.util.List;
  * Created by kelvin on 01/10/2017.
  */
 
-public interface PriviesInterface {
+public interface PriviesContract {
 
     interface View extends BaseView<Presenter> {
 
