@@ -1,8 +1,11 @@
 package com.kelvinhado.privy.privies;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,8 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class PriviesMapFragment extends Fragment implements PriviesContract.View, OnMapReadyCallback {
+
+    private static final int PERMISSIONS_REQUEST_LOCATION = 101;
 
     private PriviesContract.Presenter mPresenter;
 
@@ -105,7 +110,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
 
     public void updateMapMarkers() {
         mGoogleMap.clear();
-        for(Privy privy : mPriviesList) {
+        for (Privy privy : mPriviesList) {
             mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(privy.getLatitude(), privy.getLongitude()))
                     .title(getString(R.string.map_marker_title))
@@ -118,12 +123,24 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         //custom settings
+        enableMyLocation();
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mGoogleMap.setMaxZoomPreference(18);
         LatLng position = new LatLng(48.866667, 2.333333);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 11));
+    }
+
+    private void enableMyLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_LOCATION);
+        } else {
+            mGoogleMap.setMyLocationEnabled(true);
+        }
     }
 
     @Override
@@ -138,4 +155,20 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         super.onDestroy();
     }
     // End Map Management________________________________________________________________________END
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    enableMyLocation();
+                }
+                break;
+            }
+        }
+    }
+
 }
