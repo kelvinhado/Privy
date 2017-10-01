@@ -31,7 +31,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class PriviesListFragment extends Fragment implements PriviesContract.View,
         PriviesListAdapter.ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int PERMISSIONS_REQUEST_LOCATION = 101;
     @BindView(R.id.rv_privies)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipeRefreshLayout)
@@ -39,7 +38,6 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
 
     private PriviesContract.Presenter mPresenter;
     private List<Privy> mPriviesList;
-    private View mRootView;
     private ProgressDialog mProgress;
     private Snackbar mSnackBar;
     private PriviesListAdapter mAdapter;
@@ -63,7 +61,7 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_privies_list, container, false);
+        View mRootView = inflater.inflate(R.layout.fragment_privies_list, container, false);
         ButterKnife.bind(this, mRootView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -84,7 +82,7 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
 
     @Override
     public void setLoadingIndicator(boolean active) {
-        if(active) {
+        if(active && !mSwipeRefreshLayout.isRefreshing()) {
             mProgress.show();
         } else {
             mProgress.dismiss();
