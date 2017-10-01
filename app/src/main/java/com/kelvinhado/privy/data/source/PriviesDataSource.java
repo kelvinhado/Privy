@@ -12,12 +12,18 @@ import java.util.List;
 
 public interface PriviesDataSource {
 
+    void getPrivies(@NonNull LoadPriviesCallback callback);
+
+    void refreshPrivies();
+
+    void savePrivy(@NonNull Privy privy);
+
+    void deleteAllPrivies();
+
     interface LoadPriviesCallback {
 
         void onPriviesLoaded(List<Privy> privies);
 
         void onDataNotAvailable();
     }
-
-    void getPrivies(@NonNull LoadPriviesCallback callback);
 }

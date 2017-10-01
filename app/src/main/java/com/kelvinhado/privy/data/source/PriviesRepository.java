@@ -19,7 +19,9 @@ public class PriviesRepository implements PriviesDataSource {
     private final PriviesDataSource mPriviesRemoteDataSource;
 
     private final PriviesDataSource mPriviesLocalDataSource;
-    
+
+    private boolean mCacheIsDirty = false;
+
     // Prevent direct instantiation.
     private PriviesRepository(@NonNull PriviesDataSource priviesRemoteDataSource,
                               @NonNull PriviesDataSource priviesLocalDataSource) {
@@ -58,19 +60,39 @@ public class PriviesRepository implements PriviesDataSource {
      */
     @Override
     public void getPrivies(@NonNull final LoadPriviesCallback callback) {
-        // Query the local storage if available. If not, query the network.
-        mPriviesLocalDataSource.getPrivies(new LoadPriviesCallback() {
+        if (mCacheIsDirty) {
+            // If the cache is dirty we need to fetch new data from the network.
+            getPriviesFromRemoteDataSource(callback);
+        } else {
+            // Query the local storage if available. If not, query the network.
+            mPriviesLocalDataSource.getPrivies(new LoadPriviesCallback() {
+                @Override
+                public void onPriviesLoaded(List<Privy> privies) {
+                    callback.onPriviesLoaded(privies);
+                }
 
-            @Override
-            public void onPriviesLoaded(List<Privy> privies) {
-                callback.onPriviesLoaded(privies);
-            }
+                @Override
+                public void onDataNotAvailable() {
+                    getPriviesFromRemoteDataSource(callback);
+                }
+            });
+        }
+    }
 
-            @Override
-            public void onDataNotAvailable() {
-                getPriviesFromRemoteDataSource(callback);
-            }
-        });
+    @Override
+    public void refreshPrivies() {
+        mCacheIsDirty = true;
+    }
+
+    @Override
+    public void savePrivy(@NonNull Privy privy) {
+        // not implemented yet
+    }
+
+    @Override
+    public void deleteAllPrivies() {
+        mPriviesLocalDataSource.deleteAllPrivies();
+        mPriviesRemoteDataSource.deleteAllPrivies();
     }
 
     /**
@@ -82,6 +104,8 @@ public class PriviesRepository implements PriviesDataSource {
 
             @Override
             public void onPriviesLoaded(List<Privy> privies) {
+                refreshLocalDataSource(privies);
+                mCacheIsDirty = false;
                 callback.onPriviesLoaded(privies);
             }
 
@@ -90,5 +114,12 @@ public class PriviesRepository implements PriviesDataSource {
                 callback.onDataNotAvailable();
             }
         });
+    }
+
+    private void refreshLocalDataSource(List<Privy> privies) {
+        mPriviesLocalDataSource.deleteAllPrivies();
+        for (Privy privy : privies) {
+            mPriviesLocalDataSource.savePrivy(privy);
+        }
     }
 }

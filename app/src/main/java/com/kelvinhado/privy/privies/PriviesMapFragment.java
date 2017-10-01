@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Privy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -35,8 +36,8 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     private List<Privy> mPriviesList;
 
     private MapView mMapView;
-
     private GoogleMap mGoogleMap;
+    private boolean isMapReady;
 
     private View mRootView;
 
@@ -53,7 +54,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mPriviesList = new ArrayList<>();
     }
 
     @Nullable
@@ -93,7 +94,9 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     @Override
     public void showPrivies(List<Privy> privies) {
         mPriviesList = privies;
-        updateMapMarkers();
+        if(isMapReady) {
+            updateMapMarkers();
+        }
     }
 
     @Override
@@ -132,6 +135,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        isMapReady = true;
         mGoogleMap = googleMap;
         //custom settings
         enableMyLocation();
@@ -143,6 +147,7 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         mGoogleMap.setMaxZoomPreference(18);
         LatLng position = new LatLng(48.866667, 2.333333);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 11));
+        updateMapMarkers();
     }
 
     private void enableMyLocation() {

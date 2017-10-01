@@ -27,7 +27,7 @@ public interface PriviesContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadPrivies();
+        void loadPrivies(boolean forceUpdate);
 
         void queryFavoritesPrivies();
     }

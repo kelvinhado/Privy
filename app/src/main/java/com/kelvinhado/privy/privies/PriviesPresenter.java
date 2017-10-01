@@ -35,7 +35,10 @@ public class PriviesPresenter implements BasePresenter, PriviesContract.Presente
     }
 
     @Override
-    public void loadPrivies() {
+    public void loadPrivies(boolean forceUpdate) {
+        if(forceUpdate) {
+            mPriviesRepository.refreshPrivies();
+        }
         loadPriviesFromDataSource();
     }
 

@@ -42,7 +42,7 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
     @Override
     public void getPrivies(@NonNull LoadPriviesCallback callback) {
         mCallback = callback;
-
+        Log.d(TAG, "fetched from remote db");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://data.ratp.fr/")
                 .addConverterFactory(JacksonConverterFactory.create())
@@ -51,6 +51,22 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
         RatpPriviesService service = retrofit.create(RatpPriviesService.class);
         Call<RatpPrivyPojo> pojo = service.listPrivies();
         pojo.enqueue(this);
+    }
+
+    @Override
+    public void refreshPrivies() {
+        // Not required because the {@link PriviesRepository} handles the logic of refreshing the
+        // tasks from all the available data sources.
+    }
+
+    @Override
+    public void savePrivy(@NonNull Privy privy) {
+        // Not supported because our remote datasource does not support saving privies
+    }
+
+    @Override
+    public void deleteAllPrivies() {
+        // Not supported because our remote datasource does not support saving privies
     }
 
     private Privy convertToPrivy(Record pojo) {
@@ -71,6 +87,7 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
             for (Record record : pojo.getRecords()) {
                 privies.add(convertToPrivy(record));
             }
+            Log.d(TAG, "remote data found");
             mCallback.onPriviesLoaded(privies);
         } else {
             Log.e(TAG, "connexion error");
