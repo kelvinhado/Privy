@@ -1,5 +1,6 @@
 package com.kelvinhado.privy.data.source;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.kelvinhado.privy.data.Privy;
@@ -19,6 +20,8 @@ public class PriviesRepository implements PriviesDataSource {
     private final PriviesDataSource mPriviesRemoteDataSource;
 
     private final PriviesDataSource mPriviesLocalDataSource;
+
+    private List<Privy> mCache;
 
     private boolean mCacheIsDirty = false;
 
@@ -104,9 +107,10 @@ public class PriviesRepository implements PriviesDataSource {
 
             @Override
             public void onPriviesLoaded(List<Privy> privies) {
-                refreshLocalDataSource(privies);
                 mCacheIsDirty = false;
+                mCache = privies;
                 callback.onPriviesLoaded(privies);
+                new ConvertTask().execute();
             }
 
             @Override
@@ -120,6 +124,15 @@ public class PriviesRepository implements PriviesDataSource {
         mPriviesLocalDataSource.deleteAllPrivies();
         for (Privy privy : privies) {
             mPriviesLocalDataSource.savePrivy(privy);
+        }
+    }
+
+    private class ConvertTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            refreshLocalDataSource(mCache);
+            return null;
         }
     }
 }

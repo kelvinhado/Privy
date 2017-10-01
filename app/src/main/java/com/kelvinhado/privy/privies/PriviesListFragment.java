@@ -11,10 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Privy;
+import com.kelvinhado.privy.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,11 +124,13 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
 
     @Override
     public void onListItemClicked(int itemPosition) {
-        Toast.makeText(getContext(), "item selected "  + itemPosition, Toast.LENGTH_SHORT).show();
+        ActivityUtils.showGPSDialog(getContext(), mPriviesList.get(itemPosition));
     }
 
     @Override
     public void onRefresh() {
         mPresenter.loadPrivies(true);
     }
+
+
 }
