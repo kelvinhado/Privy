@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,16 +19,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Privy;
+import com.kelvinhado.privy.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class PriviesMapFragment extends Fragment implements PriviesContract.View, OnMapReadyCallback {
+public class PriviesMapFragment extends Fragment implements PriviesContract.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 101;
 
@@ -129,11 +132,13 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
     public void updateMapMarkers() {
         mGoogleMap.clear();
         for (Privy privy : mPriviesList) {
-            mGoogleMap.addMarker(new MarkerOptions()
+            Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(privy.getLatitude(), privy.getLongitude()))
                     .title(getString(R.string.map_marker_title))
                     .snippet(privy.getAddressName())
             );
+            marker.setTag(privy);
+            mGoogleMap.setOnMarkerClickListener(this);
         }
     }
 
@@ -194,4 +199,17 @@ public class PriviesMapFragment extends Fragment implements PriviesContract.View
         }
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+        final Privy privy = (Privy) marker.getTag();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ActivityUtils.showGPSDialog(getContext(), privy);
+            }
+        }, 1001);
+        return true;
+    }
 }

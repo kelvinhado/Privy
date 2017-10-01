@@ -1,8 +1,6 @@
 package com.kelvinhado.privy.privies;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -16,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.kelvinhado.privy.R;
 import com.kelvinhado.privy.data.Privy;
+import com.kelvinhado.privy.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,20 +124,13 @@ public class PriviesListFragment extends Fragment implements PriviesContract.Vie
 
     @Override
     public void onListItemClicked(int itemPosition) {
-        Privy privy = mPriviesList.get(itemPosition);
-        String str = "geo:" + privy.getLatitude() + "," + privy.getLongitude()
-                + "?q=" + privy.getLatitude() + "," + privy.getLongitude()
-                + "(" + Uri.encode(privy.getAddressName()) + ")";
-        Uri gmmIntentUri = Uri.parse(str);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivity(mapIntent);
-        }
+        ActivityUtils.showGPSDialog(getContext(), mPriviesList.get(itemPosition));
     }
 
     @Override
     public void onRefresh() {
         mPresenter.loadPrivies(true);
     }
+
+
 }

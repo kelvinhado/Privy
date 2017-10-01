@@ -10,4 +10,6 @@
     <string name="list_item_btn_navigate">Naviguer</string>
     <string name="snackbar_error_message">Une erreur est survenue, vérifiez votre réseau.</string>
     <string name="actionbar_main_title">Privy : Vos toilettes à Paris</string>
+    <string name="alert_dialog_launch_gps">Lancer le GPS</string>
+    <string name="alert_dialog_cancel">Annuler</string>
 </resources>
