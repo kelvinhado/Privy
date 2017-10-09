@@ -11,10 +11,16 @@ import com.kelvinhado.privy.data.source.remote.pojo.Record;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
@@ -40,17 +46,40 @@ public class PriviesRemoteDataSource implements PriviesDataSource, Callback<Ratp
     }
 
     @Override
-    public void getPrivies(@NonNull LoadPriviesCallback callback) {
+    public void getPrivies(@NonNull final LoadPriviesCallback callback) {
         mCallback = callback;
         Log.d(TAG, "fetched from remote db");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://data.ratp.fr/")
                 .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         RatpPriviesService service = retrofit.create(RatpPriviesService.class);
-        Call<RatpPrivyPojo> pojo = service.listPrivies();
-        pojo.enqueue(this);
+        Observable<RatpPrivyPojo> pojo = service.listPrivies();
+        pojo.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<RatpPrivyPojo, List<Privy>>() {
+                    @Override
+                    public List<Privy> apply(RatpPrivyPojo ratpPrivyPojo) throws Exception {
+                        List<Privy> privies = new ArrayList<Privy>();
+                        for(Record record : ratpPrivyPojo.getRecords()) {
+                            privies.add(convertToPrivy(record));
+                        }
+                        return privies;
+                    }
+                })
+                .subscribe(new Consumer<List<Privy>>() {
+                    @Override
+                    public void accept(List<Privy> privies) throws Exception {
+                        callback.onPriviesLoaded(privies);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        callback.onDataNotAvailable();
+                    }
+                });
     }
 
     @Override
