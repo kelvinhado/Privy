@@ -21,3 +21,10 @@ This application will show you the position of all the toilets (privy) in Paris 
 - Unit And Instrumented Test for the Database
 
 You can find the APK under [this link](app.apk)
+
+### Screenshots
+
+![alt text](screenshots/privy_map_loading.png)
+![alt text](screenshots/privy_map_main.png)
+![alt text](screenshots/privy_map_navigate.png)
+![alt text](screenshots/privy_list.png)
